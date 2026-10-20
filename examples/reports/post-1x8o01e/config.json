@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "universe": [
+    "SPY"
+  ],
+  "timeframe": "1d",
+  "capital": 10000.0,
+  "max_position_fraction": 1.0,
+  "max_total_fraction": 1.0,
+  "fee_bps": 2.0,
+  "slippage_bps": 3.0,
+  "warmup_bars": 2,
+  "parameters": {
+    "hold_sessions": 5,
+    "fraction": 1
+  },
+  "execution": "cash_equity_next_open",
+  "execution_shift": "none",
+  "formulation": "llm_hypothesis",
+  "assumptions": [
+    "Use the post's five-session exit variant; the other two exit variants are separate experiments and are not optimized here.",
+    "Two down closes means two consecutive close-to-close declines, not two red candle bodies.",
+    "Count the entry session as session one; exit at the next open after five completed held sessions.",
+    "Use the host's whole-share cash account, 2 bps fee and 3 bps slippage per fill; the post does not state its exact cost schedule or sizing rules.",
+    "2020-2024 data predates the October 2026 post and is retrospective only; it is not an untouched holdout.",
+    "Use SPY daily completed-session bars and the five-session exit variant; Wednesday and weekend exits are separate experiments.",
+    "Two down closes means consecutive close-to-close declines; unchanged or higher closes reset the streak.",
+    "Count the entry session as session one and sell at the next recorded open after five completed held sessions, using next_bar validity across session boundaries.",
+    "Default hold_sessions is 5 and fraction is 1; supplied parameters may override those values within their validated ranges.",
+    "Allocate up to fraction of current equity, limited by available cash, with whole-share sizing estimated from the signal close and configured 2 bps fees and 3 bps slippage.",
+    "Use the configured 100% position and total exposure caps; the host enforces actual fill affordability and caps.",
+    "Run as the sole strategy in the configured SPY-only account, initially flat, with one Strategy instance per run so command identifiers remain unique.",
+    "Ignore additional entry signals while holding; after an exit fills, a qualifying signal at that session's close may initiate a new trade.",
+    "Count recorded trading sessions rather than calendar days; holidays do not add holding sessions.",
+    "The cited 2020\u20132024 evaluation period is retrospective, not an untouched holdout; no dates or historical outcomes are encoded."
+  ]
+}

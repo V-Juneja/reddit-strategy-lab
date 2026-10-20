@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+data/*
+!data/README.md
+runs/
+*.log
+*credentials*
+*tokens*
+*.egg-info/
+dist/

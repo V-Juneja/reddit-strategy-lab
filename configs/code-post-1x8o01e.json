@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "universe": [
+    "SPY"
+  ],
+  "timeframe": "1d",
+  "capital": 10000,
+  "max_position_fraction": 1,
+  "max_total_fraction": 1,
+  "fee_bps": 2,
+  "slippage_bps": 3,
+  "warmup_bars": 2,
+  "parameters": {
+    "hold_sessions": 5,
+    "fraction": 1
+  },
+  "formulation": "llm_hypothesis",
+  "assumptions": [
+    "Use the post's five-session exit variant; the other two exit variants are separate experiments and are not optimized here.",
+    "Two down closes means two consecutive close-to-close declines, not two red candle bodies.",
+    "Count the entry session as session one; exit at the next open after five completed held sessions.",
+    "Use the host's whole-share cash account, 2 bps fee and 3 bps slippage per fill; the post does not state its exact cost schedule or sizing rules.",
+    "2020-2024 data predates the October 2026 post and is retrospective only; it is not an untouched holdout."
+  ]
+}

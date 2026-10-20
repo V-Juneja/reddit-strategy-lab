@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "universe": ["AAPL", "MSFT", "AMZN"],
+  "timeframe": "1d",
+  "capital": 10000,
+  "max_position_fraction": 0.5,
+  "max_total_fraction": 0.75,
+  "fee_bps": 2,
+  "slippage_bps": 3,
+  "warmup_bars": 20,
+  "parameters": {"window": 20, "fraction": 0.4},
+  "formulation": "custom_research",
+  "assumptions": [
+    "Engine demonstration authored before its first run; not a Reddit strategy reproduction.",
+    "Static AAPL/MSFT/AMZN basket; no historical universe-selection claim.",
+    "Rank after the first completed eligible bar in each month; fill at next open.",
+    "Full market-order fills at recorded open plus declared slippage; liquidity is assumed."
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "universe": [
+    "SPY"
+  ],
+  "timeframe": "1d",
+  "capital": 10000,
+  "max_position_fraction": 1,
+  "max_total_fraction": 1,
+  "fee_bps": 2,
+  "slippage_bps": 3,
+  "warmup_bars": 1,
+  "parameters": {
+    "fraction": 1
+  },
+  "formulation": "llm_hypothesis",
+  "assumptions": [
+    "A red Monday means Monday's close is below the preceding Friday's close; require both observed calendar sessions.",
+    "Buy Tuesday open and sell Wednesday open. If a named session is a market holiday, skip that week's setup rather than shifting the weekday rule.",
+    "Use the host's whole-share cash account, 2 bps fee and 3 bps slippage per fill; the post does not disclose the exact cost schedule or sizing rules.",
+    "2020-2024 data predates the 2026 post and is retrospective only; it is not an untouched holdout."
+  ]
+}

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>2020–2024 research window · Reddit Strategy Lab</title>
+  <style>
+    :root { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #ecf1f9; background: #080d16; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 320px; background: radial-gradient(circle at 82% 0%, #17263b 0, transparent 34rem), #080d16; }
+    a { color: #a9d4ff; text-underline-offset: 3px; }
+    button { font: inherit; }
+    .shell { max-width: 1420px; margin: auto; padding: 0 36px 72px; }
+    header { height: 80px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #263142; gap: 16px; }
+    .brand { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 750; letter-spacing: .01em; }
+    .brand-mark { width: 29px; height: 29px; border-radius: 8px; background: #b4e7c7; color: #09201c; display: grid; place-items: center; font-size: 17px; font-weight: 900; }
+    .header-right { color: #94a5bd; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+    .hero { padding: 72px 0 47px; }
+    .eyebrow { display: flex; align-items: center; gap: 9px; color: #addcc2; font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 7px; height: 7px; background: #84d8a9; border-radius: 50%; box-shadow: 0 0 14px #78dca5; }
+    h1 { margin: 19px 0 16px; max-width: 840px; font-size: clamp(44px, 5.3vw, 76px); line-height: .99; letter-spacing: -.065em; font-weight: 740; }
+    h1 em { color: #b4e7c7; font-style: normal; }
+    .lead { max-width: 800px; margin: 0; color: #a9b7ca; font-size: 17px; line-height: 1.6; }
+    .topline { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid #263346; border-radius: 17px; overflow: hidden; background: rgba(20,30,45,.88); }
+    .topline div { padding: 24px 27px 23px; border-right: 1px solid #263346; }
+    .topline div:last-child { border: 0; }
+    .metric-label { display: block; color: #8498b2; font-size: 11px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+    .topline strong { display: block; margin-top: 9px; font-size: 24px; letter-spacing: -.04em; }
+    .topline small { display: block; color: #8396ad; margin-top: 6px; font-size: 12px; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding: 57px 0 22px; }
+    h2 { margin: 0; font-size: 27px; letter-spacing: -.035em; }
+    .section-head p { margin: 7px 0 0; color: #8fa1b8; font-size: 14px; }
+    .section-head > span { color: #8fa1b8; font-size: 12px; white-space: nowrap; }
+    .cases { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .case { min-width: 0; background: #121d2d; border: 1px solid #2a384b; border-radius: 18px; overflow: hidden; }
+    .case-inner { padding: 26px 27px 0; }
+    .case-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .case-id { color: #93d9af; font-size: 11px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    .badge { border: 1px solid #3b5066; border-radius: 100px; color: #b8c8d9; padding: 5px 10px; font-size: 11px; white-space: nowrap; }
+    h3 { margin: 22px 0 8px; font-size: 26px; letter-spacing: -.04em; line-height: 1.15; }
+    .rule { margin: 0; color: #a8b9cb; font-size: 13px; line-height: 1.55; min-height: 40px; }
+    .case-metrics { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; padding: 26px 0 24px; }
+    .case-metrics strong { display: block; margin-top: 9px; font-size: 24px; letter-spacing: -.045em; }
+    .positive { color: #9ce3b9; }
+    .chart-wrap { padding: 14px 16px 4px; margin: 0 12px; border: 1px solid #314054; border-radius: 12px; background: #fff; }
+    .chart-wrap img { display: block; width: 100%; height: auto; }
+    .chart-label { margin: 8px 0 15px; color: #597086; font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+    .case-footer { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding: 20px 27px 23px; color: #90a4bb; font-size: 12px; }
+    .case-footer a { font-weight: 700; }
+    .rule-strip { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 1px; background: #263346; border: 1px solid #263346; border-radius: 16px; overflow: hidden; margin-top: 26px; }
+    .rule-strip > div { padding: 22px 25px; background: #111b29; }
+    .rule-strip strong { color: #e8eff8; display: block; font-size: 13px; margin-bottom: 7px; }
+    .rule-strip p { margin: 0; color: #98aac0; font-size: 12px; line-height: 1.5; }
+    .note { margin-top: 35px; padding: 21px 24px; border-left: 3px solid #d5b37b; border-radius: 4px 12px 12px 4px; background: #1a2130; color: #b6c3d2; font-size: 13px; line-height: 1.6; }
+    .note strong { color: #f1dfbc; }
+    footer { display: flex; justify-content: space-between; gap: 16px; padding-top: 38px; color: #73869b; font-size: 12px; }
+    @media (max-width: 930px) { .topline { grid-template-columns: 1fr 1fr; } .topline div:nth-child(2) { border-right: 0; } .topline div:nth-child(-n+2) { border-bottom: 1px solid #263346; } .cases { grid-template-columns: 1fr; } }
+    @media (max-width: 650px) { .shell { padding: 0 18px 45px; } header { height: 68px; } .header-right { display: none; } .hero { padding: 54px 0 35px; } .lead { font-size: 15px; } .topline div { padding: 17px; } .topline strong { font-size: 19px; } .rule-strip { grid-template-columns: 1fr; } .section-head > span { display: none; } .case-inner { padding: 22px 20px 0; } .case-metrics strong { font-size: 20px; } .case-footer { padding: 18px 20px 21px; } footer { display: block; line-height: 1.8; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div class="brand"><span class="brand-mark">↗</span> Reddit Strategy Lab</div>
+      <div class="header-right">Research preview / SPY daily</div>
+    </header>
+    <section class="hero">
+      <div class="eyebrow">Saved research window</div>
+      <h1>What the strategies did<br><em>from 2020 to 2024.</em></h1>
+      <p class="lead">Two real Reddit ideas, translated into distinct strategy code and replayed against the same observed SPY sessions. The model specifies signals; the host controls order timing, fills, fees, cash and position limits.</p>
+    </section>
+    <section class="topline" aria-label="Research window facts">
+      <div><span class="metric-label">Period</span><strong>2020–2024</strong><small>Jan 2, 2020 – Dec 31, 2024</small></div>
+      <div><span class="metric-label">Observed bars</span><strong>1,258</strong><small>Real SPY daily OHLCV</small></div>
+      <div><span class="metric-label">Starting cash</span><strong>$10,000</strong><small>Each case; cash account</small></div>
+      <div><span class="metric-label">Execution</span><strong>Next open</strong><small>2 bp fee + 3 bp slippage per fill</small></div>
+    </section>
+    <div class="section-head"><div><h2>Two case studies</h2><p>Same dates and market data, different source rules.</p></div><span>Retrospective results · price returns</span></div>
+    <section class="cases" aria-label="Strategy results">
+      <article class="case">
+        <div class="case-inner">
+          <div class="case-top"><span class="case-id">01 / Sequence</span><span class="badge">Source-inspired interpretation</span></div>
+          <h3>Two down closes</h3>
+          <p class="rule">After two consecutive close-to-close declines, buy SPY at the next open. Hold five recorded sessions, then exit at the following open.</p>
+          <div class="case-metrics">
+            <div><span class="metric-label">Net return</span><strong class="positive">+62.03%</strong></div>
+            <div><span class="metric-label">Final equity</span><strong>$16,203</strong></div>
+            <div><span class="metric-label">Max drawdown</span><strong>−18.08%</strong></div>
+          </div>
+        </div>
+        <figure class="chart-wrap"><img src="../post-1x8o01e/equity.png" alt="Equity curve for the two down closes case, January 2020 to December 2024"><figcaption class="chart-label">Historical marked equity · 2020–2024</figcaption></figure>
+        <div class="case-footer"><span>105 buys · 104 sells · 8 rejected buys</span><a href="../post-1x8o01e/report.md">Full report ↗</a><a href="https://www.reddit.com/r/StockTradingIdeas/comments/1x8o01e/buying_spy_after_two_red_days_in_a_row_made_283/">Reddit source ↗</a></div>
+      </article>
+      <article class="case">
+        <div class="case-inner">
+          <div class="case-top"><span class="case-id">02 / Calendar</span><span class="badge">Source-inspired interpretation</span></div>
+          <h3>Turnaround Tuesday</h3>
+          <p class="rule">If Monday closes below the preceding Friday, buy SPY at Tuesday's open and sell at Wednesday's open. Skip holiday weeks.</p>
+          <div class="case-metrics">
+            <div><span class="metric-label">Net return</span><strong class="positive">+4.21%</strong></div>
+            <div><span class="metric-label">Final equity</span><strong>$10,421</strong></div>
+            <div><span class="metric-label">Max drawdown</span><strong>−10.39%</strong></div>
+          </div>
+        </div>
+        <figure class="chart-wrap"><img src="../post-1wmxzw7/equity.png" alt="Equity curve for the red Monday Tuesday-to-Wednesday case, January 2020 to December 2024"><figcaption class="chart-label">Historical marked equity · 2020–2024</figcaption></figure>
+        <div class="case-footer"><span>79 round trips · 6 rejected buys</span><a href="../post-1wmxzw7/report.md">Full report ↗</a><a href="https://www.reddit.com/r/TheRaceTo10Million/comments/1wmxzw7/turnaround_tuesday_on_spy_is_real_and_it_still/">Reddit source ↗</a></div>
+      </article>
+    </section>
+    <section class="rule-strip" aria-label="Research controls">
+      <div><strong>Strategy code is frozen before prices</strong><p>Codex generated distinct Python implementations from the posts and declared assumptions, then a separate model call reviewed them before the first performance run.</p></div>
+      <div><strong>Host-owned execution</strong><p>Only the backtest engine fills next-open orders and accounts for cash, whole shares, costs and exposure caps.</p></div>
+      <div><strong>Recorded trade checks</strong><p>Every order was independently compared with the observed CSV. Fresh-worker causal prefix replay matched strategy decisions.</p></div>
+    </section>
+    <aside class="note"><strong>How to read these numbers.</strong> Both posts appeared after this price window, and both came from the same author. This sample is retrospective, not an untouched holdout or proof of future returns. The first case ends with 27 SPY shares marked at the final close. Whole-order liquidity is assumed; dividends are excluded. The exact dates and source-data SHA256 are saved in the repo's tracked research-window record.</aside>
+    <footer><span>Reddit Strategy Lab · Real data only · No synthetic observations</span><span>Method and order checks: <code>docs/case-studies.md</code></span></footer>
+  </main>
+</body>
+</html>

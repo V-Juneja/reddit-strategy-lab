@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "universe": [
+    "SPY"
+  ],
+  "timeframe": "1d",
+  "capital": 10000.0,
+  "max_position_fraction": 1.0,
+  "max_total_fraction": 1.0,
+  "fee_bps": 2.0,
+  "slippage_bps": 3.0,
+  "warmup_bars": 1,
+  "parameters": {
+    "fraction": 1
+  },
+  "execution": "cash_equity_next_open",
+  "execution_shift": "none",
+  "formulation": "llm_hypothesis",
+  "assumptions": [
+    "A red Monday means Monday's close is below the preceding Friday's close; require both observed calendar sessions.",
+    "Buy Tuesday open and sell Wednesday open. If a named session is a market holiday, skip that week's setup rather than shifting the weekday rule.",
+    "Use the host's whole-share cash account, 2 bps fee and 3 bps slippage per fill; the post does not disclose the exact cost schedule or sizing rules.",
+    "2020-2024 data predates the 2026 post and is retrospective only; it is not an untouched holdout.",
+    "Use completed daily SPY bars, with one strategy instance owning the SPY position and a unique command-ID namespace within its run.",
+    "Require an observed Friday session exactly three calendar days before Monday; skip setups when Tuesday or Wednesday is not a scheduled session.",
+    "Use fraction=1 by default, allocating up to that fraction of current equity subject to available cash and whole-share rounding.",
+    "The host enforces the configured 100% position and total caps and applies 2 bps fees and 3 bps slippage per fill. Close-based sizing cannot guarantee affordability at the unknown next open.",
+    "The account starts without unrelated positions or orders. Daily callbacks and next recorded opens follow the supplied exchange calendar.",
+    "The supplied 2020\u20132024 data is retrospective relative to the 2026 post and is not an untouched holdout."
+  ]
+}

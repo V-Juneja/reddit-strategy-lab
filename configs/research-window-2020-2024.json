@@ -1,0 +1,16 @@
+{
+  "name": "SPY daily 2020–2024 case-study window",
+  "start_inclusive": "2020-01-01",
+  "end_exclusive": "2025-01-01",
+  "first_observed_session": "2020-01-02",
+  "last_observed_session": "2024-12-31",
+  "observed_bars": 1258,
+  "symbol": "SPY",
+  "timeframe": "1d",
+  "local_prices": "data/market/SPY-2020-01-01-2025-01-01.csv",
+  "price_sha256": "0311e24a54fc387484e0b3adb616ecc00499eda43ef0d977b3ddc68cff59ecff",
+  "provider": "Yahoo Finance chart endpoint",
+  "market_data": "real observed OHLCV; split-adjusted prices; cash dividends excluded",
+  "synthetic": false,
+  "purpose": "Retrospective case-study replay, not an untouched holdout"
+}
