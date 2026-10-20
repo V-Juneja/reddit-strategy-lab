@@ -6,4 +6,4 @@
 - Public examples must be intentionally selected: metrics/charts, source links and minimal excerpts only. Review HTML embedded assets and JSON specs too. Do not imply redistribution rights for Reddit or market datasets.
 - Check every actual model ID, hypothesis label, source-text version caveat, cost assumption and failed/excluded candidate.
 - Never describe development-used data as untouched or a hypothesis as a faithful reproduction. Do not promote a best historical result as an edge.
-- Do not push, publish, deploy or send messages without explicit user instruction. This project has not been published.
+- Do not push, publish, deploy or send messages without explicit user instruction.

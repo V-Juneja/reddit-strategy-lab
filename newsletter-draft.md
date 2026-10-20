@@ -22,7 +22,7 @@ the flow has two possible endings:
 
 that second path is the feature i care about most. “i can’t test this yet” is a much better answer than a clean-looking result based on a guess.
 
-i put the code, configs and run files here so you can check what it did: [open the project files](ADD_PUBLIC_REPO_LINK_HERE).
+i put the code, configs and run files here so you can check what it did: [open the project files](https://github.com/V-Juneja/reddit-strategy-lab).
 
 ## 1. finding posts without reading all of reddit
 
