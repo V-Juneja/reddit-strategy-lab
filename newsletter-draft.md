@@ -1,18 +1,18 @@
 # i built a bot that makes reddit trading strategies show their work
 
-*it searches selected subreddits, turns posts into backtests, and tells me when a strategy is too vague to test. the goal is to do research, not larp as a quant because a line went up.*
+*it finds strategy posts, turns the testable ones into backtests, and calls out the ones that leave half the rules in somebody’s head.*
 
 ![Blue banner with the Reddit logo pointing toward a question-marked money goal](assets/reddit-strategy-finder-cover.png)
 
 ## the idea
 
-there’s always someone on a trading subreddit posting a chart with a caption like “this setup prints.” the replies are already split between “genius” and “this is overfit.”
+there’s always someone on a trading subreddit posting a chart with a caption like “this setup prints.” the replies are already split between “genius” and “this is overfit.” somewhere in there is a question nobody has time to answer: what did they actually test?
 
-i wanted a way to check the idea without copying the post into a notebook, guessing what the rules mean, then writing a new backtester every time. and i don’t want a bot that spits out a green chart so i can larp as a quant for an afternoon. i want to see the post, the rules it pulled from it, the code, and what happened when those rules hit the backtester.
+i wanted a way to check the idea without copying the post into a notebook, guessing what the rules mean, then writing a new backtester every time. i want the post, the rules the system pulled from it, the code, and what happened when those rules met real prices. otherwise i’m just larping as a quant because a line went up.
 
 the main reason i built it is i don’t have all the time in the world. i’ve got school, homework, other projects, and i still want to test more than one idea every few weeks. so the system can search a batch of posts, turn the ones with enough detail into rules, run the backtests, and leave the reports for me to review. i can spend my time checking what it did instead of manually feeding every post through the same steps.
 
-i’m Vihaan, a high-school freshman trying to make $1 million trading before i graduate. i have about $900 in my account, so yeah, it’s a pretty ambitious goal. this project is one attempt to get better at the research part. it doesn’t place live trades. it searches Reddit strategy posts, tries to turn them into rules, and sends those rules through a backtest. if a post leaves out something important, the system should say so instead of making up a rule and calling it alpha.
+i’m Vihaan, a high-school freshman trying to make $1 million trading before i graduate. i have about $900 in my account, so yeah, plenty of room between here and there. this project is one way to get better at finding and testing ideas. it searches Reddit strategy posts, tries to turn them into rules, and sends those rules through a backtest. if a post leaves out something important, the system should say so instead of inventing a rule and calling it alpha.
 
 the flow has two possible endings:
 
@@ -22,15 +22,15 @@ the flow has two possible endings:
 
 that second path is the feature i care about most. “i can’t test this yet” is a much better answer than a clean-looking result based on a guess.
 
-i put the code, configs and run files here so you can check what it did: [open the project files](https://github.com/V-Juneja/reddit-strategy-lab).
+i put the code, configs and example reports on [GitHub](https://github.com/V-Juneja/reddit-strategy-lab) so you can check what it did. the reports include the rules it tested, which matter a lot more than a cropped screenshot of the profitable bit.
 
 ## 1. finding posts without reading all of reddit
 
 the scanner checks selected subreddits through Reddit’s OAuth access. it looks at new, hot and top posts, plus searches for words like momentum, volatility, entries and exits. each run has a request limit, and it rotates which feed it checks first so one busy subreddit doesn’t eat the whole budget. if access is missing, it stops. no sneaky anonymous scraping.
 
-for each post, it saves where it found it, when it found it, and a hash of the text. if the same post shows up in a few feeds, it gets marked as a duplicate. saved cursors let the next run pick up where the last one stopped.
+for each post, it saves where it found it, when it found it, and a fingerprint of the text. if the same post shows up in a few feeds, it gets marked as a duplicate. saved cursors let the next run pick up where the last one stopped.
 
-there’s a collect-only mode too. it saves the posts and search log without asking a model to read them or running a backtest. that lets me see what the scanner found before the more expensive steps start.
+there’s a collect-only mode too. it saves the posts and search log without calling the model or running a backtest. useful when i want to see whether the scanner found actual rules or 40 variations of “trust me bro.”
 
 this is a bounded scan of selected feeds, not every Reddit post ever made. it reads the post, not its comments or linked articles. so if the actual entry rule is hiding in a comment, the scanner misses it. when a post doesn’t give enough detail, the result should be “needs clarification” or “unsupported,” not a confident chart based on rules nobody wrote.
 
@@ -38,38 +38,31 @@ this is a bounded scan of selected feeds, not every Reddit post ever made. it re
 
 posts are written for people, not code. “buy the dip and sell when it turns around” sounds like a strategy until you ask what counts as a dip.
 
-before it writes anything, the system checks what the post says about:
-
-- the symbol or group of symbols
-- the timeframe
-- entry and exit rules
-- position size
-- when an order could fill
-- what’s missing or ambiguous
+before it writes anything, the system checks the symbol, timeframe, entry, exit, position sizing, and what the post leaves ambiguous. those aren’t little details. change the fill time or the exit rule and you’ve changed the strategy.
 
 a language model turns the post into a rule sheet, with short quotes showing where each rule came from. the system checks that sheet against a fixed schema and the data config. if the post leaves out a required detail, faithful mode stops. if the backtester doesn’t support the market or order type, it records that instead of swapping in SPY just to get a chart.
 
-there’s also a hypothesis mode for testing an interpretation. any guess has to be written down with the result, so nobody mistakes my interpretation for what the Reddit author actually said.
+there’s also a hypothesis mode for testing an interpretation. any assumption has to show up beside the result, so nobody mistakes my version for what the Reddit author actually said.
 
-“two red days” is a good example. does that mean two candles that closed below their open, or two closes lower than the day before? those are different rules. if the code quietly picks one, the test might answer a question the post never asked. and that’s where i could start larping as a quant: let the model guess, then act like the result came straight from the post.
+“two red days” is a good example. does that mean two candles that closed below their open, or two closes lower than the day before? those are different signals. if the code quietly picks one, the backtest answers a question the post never asked.
 
 ## 3. getting the code to follow the post
 
-once a post has enough detail, the coding model gets the post, its rule sheet, and a small interface that tells it what the strategy can do. it writes a Python strategy from those rules. it doesn’t see the historical prices or backtest results while writing, so it can’t tune the code to a curve it already saw.
+once a post has enough detail, the coding model gets the post, its rule sheet, and a small interface that tells it what the strategy can do. it writes a Python strategy from those rules. it doesn’t see the historical prices or backtest results while writing. that keeps this run from turning into an optimization loop where the model sees a bad result and quietly edits the rules until the chart looks nicer.
 
 i use the Codex CLI i’m already signed into. i was not about to spend a pile of money on model credits just to find out “buy the dip” doesn’t compile. the repo doesn’t store a model API key.
 
 the generated code can look at completed bars and the simulated account’s cash and positions. it can ask to place an order, but it can’t decide the order filled, pick its own price, or edit the account balance. a separate check compares the code to the rule sheet and checks that it uses the interface properly. if it finds a specific problem, the model gets one try to fix it. if that still fails, there’s no result to publish.
 
-and a clean-looking Python file doesn’t prove the model understood the post. that’s why the report keeps the source post, rule sheet, assumptions, code and review result together. you can follow what the system read and what it tested.
+a clean-looking Python file doesn’t prove the model understood the post. the report keeps the source, rule sheet, assumptions, code and review result together so you can see exactly where my test might have drifted from the original claim.
 
 ## 4. the backtester handles the money part
 
 the strategy can ask for an order. the backtest engine handles prices, fills and the account.
 
-it needs actual price files for the exact symbol and timeframe in the config. it checks for missing or misaligned bars instead of filling gaps with made-up prices or quietly switching tickers. the strategy only sees completed bars, so a signal at today’s close can first trade at tomorrow’s open.
+it needs actual price files for the exact symbol and timeframe in the config. it checks for missing or misaligned bars instead of filling gaps with made-up prices or quietly switching tickers. the strategy only sees completed bars, so a signal at today’s close can first trade at tomorrow’s open. trading at the close after using that same close to make the decision would sneak in information you didn’t have yet. quants call that look-ahead bias; i call it accidentally inventing a time machine.
 
-the engine checks each order against cash and position limits. it handles whole shares, fees and slippage, rejects buys the account can’t afford, and rejects sells that would create a short position. no leverage, no brokerage connection, and no magic fill at the same close that triggered the signal.
+the engine checks each order against cash and position limits. it handles whole shares, fees and slippage, rejects buys the account can’t afford, and rejects sells that would create a short position. slippage is the small price penalty you pay when the fill isn’t as good as the price on your screen. it’s small per trade and pretty annoying once a strategy keeps trading. no magic fill at the same close that triggered the signal.
 
 the generated code also runs in a restricted macOS sandbox. it can’t read project files or credentials, use the network, or launch another process. it gets a limited snapshot of the market and account, then returns typed order requests. if the sandbox check fails, the run stops.
 
@@ -77,11 +70,11 @@ the generated code also runs in a restricted macOS sandbox. it can’t read proj
 
 every candidate gets a status: ran, needs more detail, unsupported, or skipped. if it runs, the report saves the original post, extracted rules, code, settings, orders and charts together. a green line by itself doesn’t tell you what the system thought it was testing.
 
-one post the scanner found described buying SPY after two consecutive lower closes and holding for five sessions. the system turned that into rules and ran it through the same engine. the test used daily SPY prices from Yahoo Finance from 2020 to 2024, a simulated $10,000 account, next-open fills, whole shares, 2 basis points in fees and 3 basis points of slippage per fill. dividends are excluded.
+one post described buying SPY after two consecutive lower closes and holding for five sessions. the system turned that into rules and ran it through the same engine. for this example, it used daily SPY prices from 2020 to 2024, a simulated $10,000 account, next-open fills, whole shares, and fees and slippage on every fill. those settings are frozen in the [case report](examples/reports/post-1x8o01e/report.md). dividends are excluded.
 
 ![Matplotlib comparison of the Reddit-sourced rule and SPY buy-and-hold, starting from $10,000](examples/reports/post-1x8o01e/article-equity-vs-spy.png)
 
-the rule finished around $16,203, up 62%. that’s the part that looks great in a screenshot. then i ran SPY buy-and-hold over the same period with the same starting cash and costs: about $17,887, up 79%. so, yeah, i got beat by buying the thing and doing nothing.
+the rule finished up about 62% over the five-year window. i stared at that chart for a second. then i put SPY buy-and-hold beside it: up about 79% over the same window. i got beat by buying the thing and doing nothing.
 
 *me seeing +62% before scrolling down to the SPY line:*
 
@@ -91,13 +84,15 @@ the rule finished around $16,203, up 62%. that’s the part that looks great in 
 
 ![Matplotlib drawdown comparison for the Reddit-sourced rule and SPY buy-and-hold](examples/reports/post-1x8o01e/article-drawdown-vs-spy.png)
 
-the strategy’s biggest drawdown was about 18%, compared with 33% for buy-and-hold. that’s a smoother ride in this test, but the return still trailed SPY. it’s a price-only test, dividends excluded, and it isn’t an untouched holdout or live result.
+there is a wrinkle, though. max drawdown, the biggest peak-to-trough drop, was about 18% for the rule versus 33% for buy-and-hold. so it made less money here, but took a smaller hit along the way. that’s why i care about risk-adjusted performance, not just the final equity number. Sharpe ratio is one way to put return next to volatility, but one neat ratio wouldn’t settle this either. exposure matters: a strategy sitting in cash for part of the test is taking different risk from owning SPY the whole time.
 
-i’m not trying to prove this particular strategy is some secret edge. it’s one example of the system taking a Reddit post, turning it into rules, and leaving a report i can inspect. the result was mixed: up 62%, behind SPY, with a smaller drawdown. that’s more useful than a screenshot that only shows the part where the line goes up.
+also, this post came *after* the price window. the backtest is retrospective, not an untouched out-of-sample test. i can inspect how the system translated the rule and whether the trades line up; i can’t claim this chart predicts what happens next.
+
+another post gave the bot a “red Monday, buy Tuesday, sell Wednesday” rule. the first generated version refused to trade because it couldn’t tell whether those weekdays were both market sessions in a holiday week. honestly, fair. i had to give the strategy the upcoming exchange-session dates before the test could run. the [second case report](examples/reports/post-1wmxzw7/report.md) is in the repo too. i like that this failure showed up as a missing input instead of a mysterious zero-trade chart.
 
 ## 6. keep it running while i work on other stuff
 
-right now, i run the finder in bounded batches. once it starts, it can process eligible posts and produce the reports automatically, then i review what it found. it also saves its place. once i put it on a scheduler, it can keep checking the selected subreddits while i’m at school or working on other projects, and leave new candidates for me to look at later.
+right now, i run the finder in bounded batches. once it starts, it processes eligible posts and leaves reports for me to review. it saves its place too. i haven’t put it on a scheduler yet, but that’s the idea: let it keep looking while i’m at school or working on something else, then come back to a stack of candidates and rejections instead of another hour of scrolling.
 
 if something looks interesting, i can check the original post, see how the system translated it, and paper-test it. only after that would i consider testing it in my separate live algo-trading setup. the Reddit finder itself can’t place trades.
 
@@ -105,10 +100,10 @@ if something looks interesting, i can check the original post, see how the syste
 
 automating the steps doesn’t mean the results are automatically good. a post can be wrong, edited or missing context. the model can misunderstand a rule. a strategy can look good by luck. and a backtest can miss real stuff like market impact, queue position or delayed prices.
 
-this pilot uses one fixed SPY price window and a small number of examples. i haven’t proved the scanner finds every good idea, or that any strategy will work live. i want to save the candidates that fail too, because otherwise this turns into a museum of only the charts that went up.
+this pilot uses one fixed SPY price window and a small number of examples. the posts themselves came later than that window, which means selection bias is a real problem: whoever wrote them may have already seen what worked in those years. then there’s multiple testing. scan enough ideas and some will look great by luck alone. i want to keep the candidates that fail too. otherwise the newsletter turns into a museum of surviving charts.
 
-i keep seeing people post one good-looking backtest and act like they found the next Medallion Fund. this tool is my attempt to make the claim show its work: find the post, pin down the rules, run the test, and put the result next to a benchmark.
+i keep seeing people post one good-looking backtest and act like they found the next Medallion Fund. maybe somebody did find something interesting. i’d still like to see the entry rule, the fill assumptions, the drawdown, and what happens next to a benchmark before we start naming the fund.
 
-the goal is still $1 million before i graduate. right now i have about $900 in my account, a Reddit strategy finder, and a first strategy backtest that made 62% on paper and still got beat by SPY. that’s where i’m starting, and i’m trying not to larp my way past the part where the benchmark won.
+the goal is still $1 million before i graduate. right now i’ve got about $900, a bot that reads Reddit strategy posts, and a first chart that looked amazing until i put SPY on the same axes. i’m going to keep trying ideas, including the ones i find myself, and show the work even when the benchmark wins.
 
-subscribe to **Probably Overfit** if you want to see how the attempt goes. twice a week i’ll share what the scanner finds, the code and charts, and the ideas that get cooked. the million-dollar goal is real; showing the work is how i’ll keep myself honest.
+subscribe to **Probably Overfit** if you want to follow the attempt. i post twice a week: what i tested, what broke, and whether any of this gets me closer to the million or just better at spotting my own larping.
