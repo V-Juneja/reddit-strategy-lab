@@ -13,6 +13,7 @@ REVIEWED_PUBLIC_ARTWORK = {
     "assets/reddit-logo-user-upload.png",
     "assets/reddit-strategy-finder-cover.png",
     "assets/reddit-strategy-finder-cover.svg.png",
+    "assets/reddit-strategy-finder-preview-1400x1000.png",
     "assets/road-to-1m-900.png",
 }
 
