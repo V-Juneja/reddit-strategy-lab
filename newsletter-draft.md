@@ -125,3 +125,5 @@ i keep seeing people post one good-looking backtest and act like they found the 
 the goal is still $1 million before i graduate. right now i’ve got about $900, a bot that reads Reddit strategy posts, and a first chart that looked amazing until i put SPY on the same axes. i’m going to keep trying ideas, including the ones i find myself, and show the work even when the benchmark wins.
 
 subscribe to **Probably Overfit** if you want to follow the attempt. i post twice a week: what i tested, what broke, and whether any of this gets me closer to the million or just better at spotting my own larping.
+
+![The road to $1 million: $900 of $1,000,000, or 0.09%](assets/road-to-1m-900.png)
